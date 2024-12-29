@@ -1,0 +1,4 @@
+python-dotenv==1.0.1
+selenium==4.27.1
+twilio==9.4.1
+
