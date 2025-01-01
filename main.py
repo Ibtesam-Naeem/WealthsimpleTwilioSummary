@@ -17,10 +17,13 @@ if __name__ == "__main__":
     # Calculate change if previous data exists
     if previous_data and "total_portfolio_value" in previous_data:
         change, percentage = calculate_change(total_value, previous_data["total_portfolio_value"])
-        change_message = f"📉 Change: ${change:.2f} ({percentage:.2f}%)" if change is not None else "No change data available."
+        if change >= 0:
+            change_message = f"📈 Change in Value: ${change:.2f} ({percentage:.2f}%)" if change is not None else "No change data available."
+        elif change < 0:
+            change_message = f"📉 Change in Value: ${change:.2f} ({percentage:.2f}%)" if change is not None else "No change data available."
     else:
         change_message = "No previous data available for comparison."
-
+        
     # Scrape holdings
     holdings = scrape_holdings()
     holdings_message = format_holdings(holdings)

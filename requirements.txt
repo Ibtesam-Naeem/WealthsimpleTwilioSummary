@@ -1,4 +1,7 @@
-python-dotenv==1.0.1
-requests==2.32.3
-selenium==4.27.1
-twilio==9.4.1
+twilio
+yfinance
+selenium
+requests
+finnhub-python
+python-dotenv
+

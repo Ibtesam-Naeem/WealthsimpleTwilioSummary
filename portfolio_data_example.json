@@ -1,0 +1,23 @@
+{
+    "total_portfolio_value": "$0.00",
+    "holdings": [
+        {
+            "Position": "TICKER",
+            "Total Value": "$0.00 USD\n0 shares",
+            "Today's Price": "$0.00 USD\n\u22120.00%",
+            "All Time Return": "\u2212$0.00 USD\n\u22120.00%"
+        },
+        {
+            "Position": "TICKER",
+            "Total Value": "$0.00 USD\n0 shares",
+            "Today's Price": "$0.00 USD\n\u22120.00%",
+            "All Time Return": "\u2212$0.00 USD\n\u22120.00%"
+        },
+        {
+            "Position": "TICKER",
+            "Total Value": "$0.00 USD\n0 shares",
+            "Today's Price": "$0.00 USD\n\u22120.00%",
+            "All Time Return": "\u2212$0.00 USD\n\u22120.00%"
+        }
+    ]
+}
