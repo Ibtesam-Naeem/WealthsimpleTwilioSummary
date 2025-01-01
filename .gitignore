@@ -3,3 +3,4 @@ finance-env/
 __pycache__/
 *.pyc
 *.DS_Store
+portfolio_data.json
