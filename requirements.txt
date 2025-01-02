@@ -2,6 +2,4 @@ twilio
 yfinance
 selenium
 requests
-finnhub-python
 python-dotenv
-
