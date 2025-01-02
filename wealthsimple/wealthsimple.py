@@ -188,26 +188,3 @@ def format_holdings(holdings):
         message.append("-" * 40)  # Separator for each holding
 
     return "\n".join(message)
-    
-if __name__ == "__main__":
-    login()
-    navigate_to_home()
-
-    # Get the total portfolio value
-    total_value = total_port_value()
-    portfolio_message = f"💰 Portfolio Value: {total_value}" if total_value else "❌ Failed to retrieve portfolio value."
-
-    # Scrape holdings
-    holdings = scrape_holdings()
-    holdings_message = format_holdings(holdings)
-
-    # Create the final message
-    final_message = f"{portfolio_message}\n\n🔍 Holdings:\n{holdings_message}"
-
-    # Send the message using Twilio
-    print(final_message)
-    send_sms(final_message)
-
-    driver.quit()
-
-
