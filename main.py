@@ -1,6 +1,9 @@
-from wealthsimple.wealthsimple import login, navigate_to_home, total_port_value, scrape_holdings, format_holdings, send_sms, logout
+from wealthsimple.auth import login, navigate_to_home, logout
+from wealthsimple.ws_data import total_port_value, scrape_holdings
+from wealthsimple.formatting import format_holdings
+from notifications.twilio_sms import send_sms
 from wealthsimple.performance import read_previous_data, write_current_data, calculate_change
-from market_data.sp500 import sp500_performance
+from analysis.sp500 import sp500_performance
 import time
 
 if __name__ == "__main__":
