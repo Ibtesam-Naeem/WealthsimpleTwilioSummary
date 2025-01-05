@@ -31,36 +31,48 @@ def total_port_value():
 def scrape_holdings():
     """
     Extract holdings data from the Wealthsimple Holdings page.
+    Retries up to 2 times if the data is not scraped successfully.
     Returns a list of dictionaries containing holdings information.
     """
-    try:
-        print("Waiting for the holdings table to load...")
-        WebDriverWait(driver, 60).until(
-            EC.presence_of_element_located((By.XPATH, "//table[contains(@class, 'iFDjPC')]"))
-        )
-        print("Holdings table located!")
+    max_retries = 2 
 
-        # Locates the holdings table
-        holdings_table = driver.find_element(By.XPATH, "//table[contains(@class, 'iFDjPC')]")
-        rows = holdings_table.find_elements(By.XPATH, ".//tbody/tr")
+    for attempt in range(max_retries):
+        try:
+            print(f"Attempt {attempt + 1} of {max_retries}: Waiting for the holdings table to load...")
+            WebDriverWait(driver, 60).until(
+                EC.presence_of_element_located((By.XPATH, "//table[contains(@class, 'iFDjPC')]"))
+            )
+            print("Holdings table located!")
 
-        holdings_data = []
-        for row in rows:
-            columns = row.find_elements(By.TAG_NAME, "td")
-            if len(columns) >= 4:  
-                position = columns[0].find_element(By.TAG_NAME, "p").text
-                total_value = columns[1].text
-                todays_price = columns[2].text
-                all_time_return = columns[3].text
+            # Locate the holdings table
+            holdings_table = driver.find_element(By.XPATH, "//table[contains(@class, 'iFDjPC')]")
+            rows = holdings_table.find_elements(By.XPATH, ".//tbody/tr")
 
-                holdings_data.append({
-                    "Position": position,
-                    "Total Value": total_value,
-                    "Today's Price": todays_price,
-                    "All Time Return": all_time_return,
-                })
-        return holdings_data
+            holdings_data = []
+            for row in rows:
+                columns = row.find_elements(By.TAG_NAME, "td")
+                if len(columns) >= 4:
+                    position = columns[0].find_element(By.TAG_NAME, "p").text
+                    total_value = columns[1].text
+                    todays_price = columns[2].text
+                    all_time_return = columns[3].text
 
-    except Exception as e:
-        print(f"Failed to scrape holdings: {e}")
-        return []
+                    holdings_data.append({
+                        "Position": position,
+                        "Total Value": total_value,
+                        "Today's Price": todays_price,
+                        "All Time Return": all_time_return,
+                    })
+
+            if holdings_data:
+                print("Holdings data scraped successfully!")
+                return holdings_data
+
+            print("No data found, retrying...")
+
+        except Exception as e:
+            print(f"Error during scraping attempt {attempt + 1}: {e}")
+
+    print("Failed to scrape holdings after multiple attempts.")
+    return []
+
