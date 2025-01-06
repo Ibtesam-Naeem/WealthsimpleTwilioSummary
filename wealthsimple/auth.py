@@ -8,6 +8,7 @@ from selenium.webdriver.support.ui import WebDriverWait
 from selenium.webdriver.support import expected_conditions as EC
 from selenium.webdriver.chrome.options import Options
 from config.chrome_options import chrome_option
+import logging
 load_dotenv()
 
 email = os.getenv("WEALTHSIMPLE_EMAIL")
@@ -46,10 +47,14 @@ def login():
         # After entering in the password, it will click enter to sign in
         password_element.send_keys(password + Keys.ENTER)
 
-        print("Sucessfully Logged in!")
+        logging.info("Sucessfully Logged in!")
+
+        # Navigates to home page upon logging in
+        navigate_to_home()
 
     except Exception as e:
-        print(f"Failed to log in: {e}")
+        logging.error(f"Failed to log in: {e}")
+        raise
 
 def navigate_to_home():
     """
@@ -66,9 +71,12 @@ def navigate_to_home():
 
         home_page.click()
 
-        print("Navigated to home page.")
+        logging.info("Navigated to home page.")
+
     except Exception as e:
-        print(f"Error navigating to home page: {e}.")
+        logging.error(f"Error navigating to home page: {e}.")
+        raise
+    
 def logout():
     """
     Logs out of Wealthsimple securely.
@@ -88,8 +96,9 @@ def logout():
             EC.element_to_be_clickable((By.XPATH, "//p[text()='Log out']"))
         )
         logout_button.click()
-        print('Sucessfully logged out)')
+        logging.info('Sucessfully logged out)')
         return True
+    
     except Exception as e:
-        print(f'Error logging out: {e}')
-        return False
+        logging.error(f'Error logging out: {e}')
+        raise
