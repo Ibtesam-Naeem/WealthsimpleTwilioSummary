@@ -9,6 +9,7 @@ from selenium.webdriver.support.ui import WebDriverWait
 from selenium.webdriver.support import expected_conditions as EC
 from selenium.webdriver.chrome.options import Options
 from config.chrome_options import chrome_option
+import logging
 load_dotenv()
 
 driver = chrome_option()
@@ -23,10 +24,11 @@ def total_port_value():
         )
         total_value = driver.find_element(By.CLASS_NAME, 'goinvI').text
 
-        print(f"Total portfolio value: {total_value}.")
+        logging.info(f"Total portfolio value: {total_value}.")
         return total_value
     except Exception as e:
-        print(f"Unable to locate total porfolio value: {e}.")
+        logging.error(f"Unable to locate total porfolio value: {e}.")
+        raise
     
 def scrape_holdings():
     """
@@ -38,11 +40,11 @@ def scrape_holdings():
 
     for attempt in range(max_retries):
         try:
-            print(f"Attempt {attempt + 1} of {max_retries}: Waiting for the holdings table to load...")
+            logging.info(f"Attempt {attempt + 1} of {max_retries}: Waiting for the holdings table to load...")
             WebDriverWait(driver, 60).until(
                 EC.presence_of_element_located((By.XPATH, "//table[contains(@class, 'iFDjPC')]"))
             )
-            print("Holdings table located!")
+            logging.info("Holdings table located!")
 
             # Locate the holdings table
             holdings_table = driver.find_element(By.XPATH, "//table[contains(@class, 'iFDjPC')]")
@@ -65,14 +67,14 @@ def scrape_holdings():
                     })
 
             if holdings_data:
-                print("Holdings data scraped successfully!")
+                logging.info("Holdings data scraped successfully!")
                 return holdings_data
 
-            print("No data found, retrying...")
+            logging.warning("No data found, retrying...")
 
         except Exception as e:
-            print(f"Error during scraping attempt {attempt + 1}: {e}")
+            logging.error(f"Error during scraping attempt {attempt + 1}: {e}")
 
-    print("Failed to scrape holdings after multiple attempts.")
+    logging.error("Failed to scrape holdings after multiple attempts.")
     return []
 
