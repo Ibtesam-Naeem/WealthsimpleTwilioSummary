@@ -1,34 +1,54 @@
-import yfinance as yf
-from datetime import datetime, timedelta
+import requests
+from dotenv import load_dotenv
+import os
+import logging
 
-def sp500_performance():
+# Load environment variables
+load_dotenv()
+FINNHUB_API = os.getenv("FINNHUB_API")
+
+def get_spy_daily_performance():
     """
-    Gets the performance of the SP500 for the latest trading day.
-    Uses the previous trading day's close and the latest available close price.
-    Handles gaps in trading days (e.g., weekends, holidays).
+    Fetches the daily performance of the SPDR S&P 500 ETF (SPY).
     """
-    sp500 = yf.Ticker("^GSPC")
-
-    # Fetch data for the past 7 days to ensure coverage of holidays and weekends does not return an error
-    end_date = datetime.now().date()
-    start_date = end_date - timedelta(days=7)
-    hist = sp500.history(start=start_date, end=end_date)
-
-    if len(hist) < 2:
-        return {"error": "Insufficient data for SP500 performance"}
-
-    # Get the last two trading days' close prices
-    last_two_closes = hist["Close"].iloc[-2:]
-    if len(last_two_closes) < 2:
-        return {"error": "Unable to retrieve two valid trading days"}
-
-    prev_close, today_close = last_two_closes.iloc[0], last_two_closes.iloc[1]
-
-    change_dollars = today_close - prev_close
-    change_percent = (change_dollars / prev_close) * 100
-
-    return {
-        "change_dollars": change_dollars,
-        "change_percent": change_percent
+    SPY_TICKER = "SPY"
+    BASE_URL = "https://finnhub.io/api/v1/quote"
+    
+    params = {
+        "symbol": SPY_TICKER,
+        "token": FINNHUB_API
     }
+    
+    try:
+        response = requests.get(BASE_URL, params=params)
+        response.raise_for_status()
+        data = response.json()
+        
+        current_price = data.get("c")  # Current price
+        previous_close = data.get("pc")  # Previous close price
+        
+        if current_price is not None and previous_close is not None:
+            daily_change = current_price - previous_close
+            daily_percent_change = (daily_change / previous_close) * 100
+            return {
+                "current_price": current_price,
+                "previous_close": previous_close,
+                "daily_change": daily_change,
+                "daily_percent_change": daily_percent_change
+            }
+        else:
+            logging.error("Incomplete data in API response.")
+    except requests.exceptions.RequestException as e:
+        logging.error(f"API request failed: {e}")
 
+def sp500_gainers():
+    """ 
+    Biggest gainers within the sp500
+    index
+    """
+
+def sp500_losers():
+    """ 
+    Biggest losers within the sp500
+    index
+    """

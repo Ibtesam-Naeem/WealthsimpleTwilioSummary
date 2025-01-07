@@ -27,12 +27,12 @@ def format_summary_message(total_value, holdings, sp500_data, change, percentage
     if "error" in sp500_data:
         sp500_message = sp500_data["error"]
     else:
-        change_dollars = sp500_data["change_dollars"]
-        change_percent = sp500_data["change_percent"]
+        change_dollars = sp500_data["daily_change"]
+        change_percent = sp500_data["daily_percent_change"]
         sp500_message = (
-            f"📈 SP500 Change: {change_dollars:.2f} ({change_percent:.2f}%)"
+            f"📈 SP500 Change: ${change_dollars:.2f} ({change_percent:.2f}%)"
             if change_dollars >= 0
-            else f"📉 SP500 Change: {change_dollars:.2f} ({change_percent:.2f}%)"
+            else f"📉 SP500 Change: %{change_dollars:.2f} ({change_percent:.2f}%)"
         )
     
     change_message = (

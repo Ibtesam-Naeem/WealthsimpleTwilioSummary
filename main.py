@@ -1,7 +1,7 @@
 from wealthsimple.auth import login, navigate_to_home, logout
 from wealthsimple.ws_data import total_port_value, scrape_holdings
 from wealthsimple.performance import read_previous_data, write_current_data, calculate_change
-from analysis.sp500 import sp500_performance
+from analysis.sp500 import get_spy_daily_performance
 from wealthsimple.formatting import format_summary_message
 from notifications.twilio_sms import send_sms
 
@@ -20,7 +20,7 @@ def fetch_sp500_data():
     """
     Gets the sp500 performance data
     """
-    sp500_data = sp500_performance()
+    sp500_data = get_spy_daily_performance()
     return sp500_data
 
 def calculate_portfolio_change(total_value, previous_data):
