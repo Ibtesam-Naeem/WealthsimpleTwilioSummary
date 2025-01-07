@@ -32,7 +32,7 @@ def format_summary_message(total_value, holdings, sp500_data, change, percentage
         sp500_message = (
             f"📈 SP500 Change: ${change_dollars:.2f} ({change_percent:.2f}%)"
             if change_dollars >= 0
-            else f"📉 SP500 Change: %{change_dollars:.2f} ({change_percent:.2f}%)"
+            else f"📉 SP500 Change: ${change_dollars:.2f} ({change_percent:.2f}%)"
         )
     
     change_message = (
