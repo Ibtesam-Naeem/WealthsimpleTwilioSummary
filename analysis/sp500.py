@@ -2,9 +2,10 @@ import requests
 from dotenv import load_dotenv
 import os
 import logging
-
-# Load environment variables
+import pandas as pd 
+from concurrent.futures import ThreadPoolExecutor, as_completed
 load_dotenv()
+
 FINNHUB_API = os.getenv("FINNHUB_API")
 
 def get_spy_daily_performance():
@@ -24,8 +25,8 @@ def get_spy_daily_performance():
         response.raise_for_status()
         data = response.json()
         
-        current_price = data.get("c")  # Current price
-        previous_close = data.get("pc")  # Previous close price
+        current_price = data.get("c")
+        previous_close = data.get("pc")
         
         if current_price is not None and previous_close is not None:
             daily_change = current_price - previous_close
@@ -40,15 +41,3 @@ def get_spy_daily_performance():
             logging.error("Incomplete data in API response.")
     except requests.exceptions.RequestException as e:
         logging.error(f"API request failed: {e}")
-
-def sp500_gainers():
-    """ 
-    Biggest gainers within the sp500
-    index
-    """
-
-def sp500_losers():
-    """ 
-    Biggest losers within the sp500
-    index
-    """
