@@ -13,6 +13,7 @@ import time
 from datetime import datetime
 from notifications.twilio_sms import send_sms
 from config.chrome_options import chrome_option
+import logging
 
 driver = chrome_option()
 
@@ -25,7 +26,7 @@ def tesla_delivery_report():
     while True:
         try:
             driver.get("https://ir.tesla.com/#quarterly-disclosure")
-            print("Navigated to Tesla IR page.")
+            logging.info("Navigated to Tesla IR page.")
 
             WebDriverWait(driver, 30).until(
                 EC.presence_of_element_located((By.XPATH, "//table"))
@@ -42,13 +43,13 @@ def tesla_delivery_report():
                     continue
 
             if not press_release_link:
-                print("Press Release link not found. Retrying in 1 minute...")
+                logging.error("Press Release link not found. Retrying in 1 minute...")
                 time.sleep(60)
                 continue
 
             link = press_release_link.get_attribute("href")
             driver.get(link)
-            print(f"Opened press release page: {link}")
+            logging.info(f"Opened press release page: {link}")
 
             WebDriverWait(driver, 10).until(
                 EC.presence_of_element_located((By.XPATH, "//table[1]"))
@@ -68,6 +69,7 @@ def tesla_delivery_report():
             time.sleep(60)
 
         except Exception as e:
+            logging.error(f"Error: {e}")
             driver.quit
 
 def nio_latest_news():
@@ -121,6 +123,3 @@ def nio_latest_news():
             print("No articles found on the page. Retrying in 1 minute...")
             time.sleep(30)
             driver.refresh()
-
-
-
