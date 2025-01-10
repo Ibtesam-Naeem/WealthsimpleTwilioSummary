@@ -1,3 +1,7 @@
+import os
+import sys
+sys.path.append(os.path.abspath(os.path.join(os.path.dirname(__file__), "..")))
+
 from wealthsimple.auth import login, navigate_to_home, logout
 from wealthsimple.ws_data import total_port_value, scrape_holdings
 from wealthsimple.performance import read_previous_data, write_current_data, calculate_change
