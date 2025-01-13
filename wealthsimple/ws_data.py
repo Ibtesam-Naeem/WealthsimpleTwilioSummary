@@ -46,7 +46,6 @@ def scrape_holdings():
             )
             logging.info("Holdings table located!")
 
-            # Locate the holdings table
             holdings_table = driver.find_element(By.XPATH, "//table[contains(@class, 'iFDjPC')]")
             rows = holdings_table.find_elements(By.XPATH, ".//tbody/tr")
 
@@ -65,7 +64,7 @@ def scrape_holdings():
                         "Today's Price": todays_price,
                         "All Time Return": all_time_return,
                     })
-
+    
             if holdings_data:
                 logging.info("Holdings data scraped successfully!")
                 return holdings_data
