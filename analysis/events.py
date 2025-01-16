@@ -13,15 +13,6 @@ import logging
 import time
 from datetime import datetime, timedelta
 
-logging.basicConfig(
-    level=logging.INFO,
-    format="%(asctime)s - %(levelname)s - %(message)s",
-    handlers=[
-        logging.FileHandler("earnings_scraper.log"),
-        logging.StreamHandler(sys.stdout)
-    ]
-)
-
 def navigate_and_scrape_earnings():
     logging.info("Starting the earnings scraping process.")
     driver = chrome_option()
@@ -35,10 +26,8 @@ def navigate_and_scrape_earnings():
         logging.info("Earnings table successfully loaded.")
 
         today_date = datetime.now().strftime("%A, %B %d, %Y")
-        tomorrow_date = (datetime.now() + timedelta(days=1)).strftime("%A, %B %d, %Y")
-        logging.debug(f"Today's date: {today_date}, Tomorrow's date: {tomorrow_date}")
+        logging.debug(f"Today's date: {today_date}")
 
-        # Find all rows in the table
         rows = driver.find_elements(By.XPATH, "//table[@id='earningsCalendarData']//tbody/tr")
         logging.info(f"Found {len(rows)} rows in the table.")
 
@@ -49,15 +38,15 @@ def navigate_and_scrape_earnings():
             try:
                 if "colspan" in row.get_attribute("outerHTML"):
                     header_text = row.text.strip()
-                    if header_text in [today_date, tomorrow_date]:
+                    if header_text in [today_date]:
                         current_date = header_text
                         logging.info(f"Processing data for date: {current_date}")
                     else:
                         current_date = None
                     continue
 
-                if current_date not in [today_date, tomorrow_date]:
-                    logging.debug("Skipping row not matching today's or tomorrow's date.")
+                if current_date not in [today_date]:
+                    logging.debug("Skipping row not matching today's date.")
                     continue
 
                 ticker_element = row.find_element(By.XPATH, ".//td[contains(@class, 'earnCalCompany')]/a")
@@ -94,7 +83,7 @@ def navigate_and_scrape_earnings():
                 logging.warning(f"Error processing row: {e}")
 
         if not earnings_data:
-            logging.info("No significant earnings data found for today or tomorrow.")
+            logging.info("No significant earnings data found for today.")
         else:
             logging.info(f"Earnings data collected: {earnings_data}")
         return earnings_data
