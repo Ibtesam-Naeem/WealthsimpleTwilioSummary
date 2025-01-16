@@ -1,6 +1,4 @@
-from dotenv import load_dotenv
 import os
-from twilio.rest import Client
 from selenium import webdriver
 from selenium.webdriver.chrome.service import Service
 from selenium.webdriver.common.by import By
@@ -10,7 +8,6 @@ from selenium.webdriver.support import expected_conditions as EC
 from selenium.webdriver.chrome.options import Options
 from config.chrome_options import chrome_option
 import logging
-load_dotenv()
 
 driver = chrome_option()
 

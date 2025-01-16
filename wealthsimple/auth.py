@@ -1,5 +1,6 @@
 from dotenv import load_dotenv
 import os
+import logging
 from selenium import webdriver
 from selenium.webdriver.chrome.service import Service
 from selenium.webdriver.common.by import By
@@ -8,9 +9,8 @@ from selenium.webdriver.support.ui import WebDriverWait
 from selenium.webdriver.support import expected_conditions as EC
 from selenium.webdriver.chrome.options import Options
 from config.chrome_options import chrome_option
-import logging
-load_dotenv()
 
+load_dotenv()
 email = os.getenv("WEALTHSIMPLE_EMAIL")
 password = os.getenv("WEALTHSIMPLE_PASSWORD")
 

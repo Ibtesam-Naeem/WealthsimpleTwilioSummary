@@ -1,4 +1,3 @@
-from dotenv import load_dotenv
 import os
 from twilio.rest import Client
 from selenium import webdriver
@@ -74,8 +73,6 @@ def navigate_and_scrape_earnings():
 
     except Exception as e:
         logging.error(f"An error occurred: {e}")
-    finally:
-        driver.quit()
 
 if __name__ == "__main__":
     navigate_and_scrape_earnings()
