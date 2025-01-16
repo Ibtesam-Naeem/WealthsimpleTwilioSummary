@@ -1,14 +1,14 @@
 import os
 import sys
 from wealthsimple.auth import login, navigate_to_home, logout
-from wealthsimple.ws_data import total_port_value, scrape_holdings
-from wealthsimple.performance import read_previous_data, write_current_data, calculate_change
+from wealthsimple.ws_data import total_port_value, scrape_holdings, format_summary_message
 from analysis.sp500 import get_spy_daily_performance
-from wealthsimple.formatting import format_summary_message
+from wealthsimple.performance import read_previous_data, write_current_data, calculate_change
 from notifications.twilio_sms import send_sms
 from analysis.tesla_deliv_report import tesla_delivery_report
 import argparse
 from datetime import datetime
+from analysis.events import navigate_and_scrape_earnings
 
 def fetch_portfolio_data():
     """
@@ -49,6 +49,12 @@ def daily_job():
     write_current_data({"total_portfolio_value": total_value, "holdings": holdings})
     send_sms(final_message)
 
+def earnings_job():
+    """
+    Executes the earnings reminder
+    """
+    
+    
 def quarterly_report():
     """
     Executes the quarterly job to scrape delivery
