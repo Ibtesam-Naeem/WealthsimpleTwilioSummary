@@ -5,7 +5,6 @@ from wealthsimple.ws_data import total_port_value, scrape_holdings, format_summa
 from analysis.sp500 import get_spy_daily_performance
 from wealthsimple.performance import read_previous_data, write_current_data, calculate_change
 from notifications.twilio_sms import send_sms
-from analysis.tesla_deliv_report import tesla_delivery_report
 import argparse
 from datetime import datetime
 from analysis.events import navigate_and_scrape_earnings
@@ -50,42 +49,22 @@ def daily_job():
 
     earnings_data = navigate_and_scrape_earnings()
     earnings_summary = "\n".join(earnings_data) if earnings_data else "No significant earnings data for today or tomorrow."
+    final_message += f"\n\nEarnings Summary:\n{earnings_summary}"
+
     write_current_data({"total_portfolio_value": total_value, "holdings": holdings})
     send_sms(final_message)
-
-def quarterly_report():
-    """
-    Executes the quarterly job to scrape delivery
-    reports.
-    """
-    tesla_delivery_report()
 
 def main():
     """
     Main function to parse command-line arguments and run the specified task.
     """
-    # Initialize logging
     setup_logging()
     logging.info("Program started.")
     
-    parser = argparse.ArgumentParser(description="Run specific tasks.")
-    parser.add_argument(
-        "--task",
-        choices=["daily_job", "quarterly_report"],
-        default="daily_job",  # Default task
-        help="Specify the task to run. Options: daily_job, quarterly_report. Default is daily_job."
-    )
-    args = parser.parse_args()
-
     try:
-        if args.task == "daily_job":
-            daily_job()
-        elif args.task == "quarterly_report":
-            quarterly_report()
-        logging.info("Program completed successfully.")
+        daily_job()
     except Exception as e:
-        logging.critical(f"Program failed with error: {e}")
-        raise
+        logging.error("Error running main job")
 
 if __name__ == "__main__":
     main()
