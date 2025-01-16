@@ -16,6 +16,21 @@ import logging
 
 driver = chrome_option()
 
+def tesla_ir_page():
+    """
+    Navigates to Teslas Investor Relations
+    Page
+    """
+    try:
+        driver.get("https://ir.tesla.com/#quarterly-disclosure")
+        logging.info("Navigated to Tesla IR page.")
+
+        WebDriverWait(driver, 30).until(
+            EC.presence_of_element_located((By.XPATH, "//table"))
+        )
+    except Exception as e:
+         logging.critical("Error navigating to IR Page!")
+        
 def tesla_delivery_report():
     """
     Continuously checks Tesla's Investor Relations page for
@@ -24,12 +39,7 @@ def tesla_delivery_report():
     """
     while True:
         try:
-            driver.get("https://ir.tesla.com/#quarterly-disclosure")
-            logging.info("Navigated to Tesla IR page.")
-
-            WebDriverWait(driver, 30).until(
-                EC.presence_of_element_located((By.XPATH, "//table"))
-            )
+            tesla_ir_page()
             rows = driver.find_elements(By.XPATH, "//table/tbody/tr")
 
             press_release_link = None

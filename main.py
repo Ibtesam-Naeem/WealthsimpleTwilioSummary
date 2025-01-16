@@ -9,6 +9,8 @@ from analysis.tesla_deliv_report import tesla_delivery_report
 import argparse
 from datetime import datetime
 from analysis.events import navigate_and_scrape_earnings
+from config.logging_info import setup_logging
+import logging
 
 def fetch_portfolio_data():
     """
@@ -46,15 +48,11 @@ def daily_job():
         total_value, holdings, sp500_data, change, percentage, previous_data
     )
 
+    earnings_data = navigate_and_scrape_earnings()
+    earnings_summary = "\n".join(earnings_data) if earnings_data else "No significant earnings data for today or tomorrow."
     write_current_data({"total_portfolio_value": total_value, "holdings": holdings})
     send_sms(final_message)
 
-def earnings_job():
-    """
-    Executes the earnings reminder
-    """
-    
-    
 def quarterly_report():
     """
     Executes the quarterly job to scrape delivery
@@ -66,6 +64,10 @@ def main():
     """
     Main function to parse command-line arguments and run the specified task.
     """
+    # Initialize logging
+    setup_logging()
+    logging.info("Program started.")
+    
     parser = argparse.ArgumentParser(description="Run specific tasks.")
     parser.add_argument(
         "--task",
@@ -75,10 +77,15 @@ def main():
     )
     args = parser.parse_args()
 
-    if args.task == "daily_job":
-        daily_job()
-    elif args.task == "quarterly_report":
-        quarterly_report()
+    try:
+        if args.task == "daily_job":
+            daily_job()
+        elif args.task == "quarterly_report":
+            quarterly_report()
+        logging.info("Program completed successfully.")
+    except Exception as e:
+        logging.critical(f"Program failed with error: {e}")
+        raise
 
 if __name__ == "__main__":
     main()

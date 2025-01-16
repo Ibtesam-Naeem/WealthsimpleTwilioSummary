@@ -9,6 +9,7 @@ from selenium.webdriver.support.ui import WebDriverWait
 from selenium.webdriver.support import expected_conditions as EC
 from selenium.webdriver.chrome.options import Options
 from config.chrome_options import chrome_option
+import logging
 
 load_dotenv()
 email = os.getenv("WEALTHSIMPLE_EMAIL")
@@ -96,7 +97,7 @@ def logout():
             EC.element_to_be_clickable((By.XPATH, "//p[text()='Log out']"))
         )
         logout_button.click()
-        logging.info('Sucessfully logged out)')
+        logging.info('Sucessfully logged out')
         return True
     
     except Exception as e:
