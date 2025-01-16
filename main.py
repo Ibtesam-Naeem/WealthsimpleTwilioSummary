@@ -56,7 +56,7 @@ def daily_job():
 
 def main():
     """
-    Main function to parse command-line arguments and run the specified task.
+    Main function to execute the daily job
     """
     setup_logging()
     logging.info("Program started.")
