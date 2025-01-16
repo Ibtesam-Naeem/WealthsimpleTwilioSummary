@@ -1,7 +1,3 @@
-import os
-import sys
-sys.path.append(os.path.abspath(os.path.join(os.path.dirname(__file__), "..")))
-
 from config.chrome_options import chrome_option
 from selenium import webdriver
 from selenium.webdriver.common.by import By

@@ -5,7 +5,6 @@ from wealthsimple.ws_data import total_port_value, scrape_holdings, format_summa
 from analysis.sp500 import get_spy_daily_performance
 from wealthsimple.performance import read_previous_data, write_current_data, calculate_change
 from notifications.twilio_sms import send_sms
-import argparse
 from datetime import datetime
 from analysis.events import navigate_and_scrape_earnings
 from config.logging_info import setup_logging
