@@ -1,7 +1,10 @@
 import os
+import sys
+sys.path.append(os.path.abspath(os.path.join(os.path.dirname(__file__), "..")))
 from selenium import webdriver
 from selenium.webdriver.chrome.service import Service
 from selenium.webdriver.chrome.options import Options
+import logging
 
 def chrome_option():
     """
@@ -17,13 +20,12 @@ def chrome_option():
     chrome_options.add_argument("user-agent=Mozilla/5.0 (Macintosh; Intel Mac OS X 10_15_7) AppleWebKit/537.36 (KHTML, like Gecko) Chrome/91.0.4472.124 Safari/537.36")
     chrome_options.add_argument("--no-sandbox")
     chrome_options.add_argument("--disable-dev-shm-usage")  
+    
     # Use main Chrome profile to retain cookies and avoid 2FA
     chrome_options.binary_location = os.getenv("CHROME_BINARY_PATH", "/Applications/Google Chrome.app/Contents/MacOS/Google Chrome")
     chrome_options.add_argument(f"user-data-dir={os.getenv('CHROME_USER_DATA_PATH', '/default/path/to/user-data')}")
     chrome_options.add_argument(f"profile-directory={os.getenv('CHROME_PROFILE', 'Default')}")
 
-    # Define the ChromeDriver service (adjust path as necessary)
     service = Service(executable_path='/usr/local/bin/chromedriver')
     
-    # Return the WebDriver instance
     return webdriver.Chrome(service=service, options=chrome_options)

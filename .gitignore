@@ -4,3 +4,5 @@ __pycache__/
 *.pyc
 *.DS_Store
 portfolio_data.json
+earnings_scraper.log
+wealthsimple_summary.log

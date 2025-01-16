@@ -1,29 +1,43 @@
-import yfinance as yf
-from datetime import datetime, timedelta
+import requests
+from dotenv import load_dotenv
+import os
+import logging
+import pandas as pd 
+from concurrent.futures import ThreadPoolExecutor, as_completed
+load_dotenv()
 
+FINNHUB_API = os.getenv("FINNHUB_API")
 
-def sp500_performance():
+def get_spy_daily_performance():
     """
-    Gets the performance of the SP500 for the day.
-    uses the prevoius day's close and the current day's closing price.
+    Fetches the daily performance of the SPDR S&P 500 ETF (SPY).
     """
-    sp500 = yf.Ticker("^GSPC")
-
-    end_date = datetime.now().date()
-    start_date = end_date - timedelta(days=3)
-
-    hist = sp500.history(start=start_date, end=end_date)
-
-    if len(hist) < 2:
-        return "No data available"
+    SPY_TICKER = "SPY"
+    BASE_URL = "https://finnhub.io/api/v1/quote"
     
-    prev_close = hist["Close"].iloc[0]
-    today_close = hist["Close"].iloc[1]
-
-    change_dollars = today_close - prev_close
-    change_percent = (change_dollars / prev_close) * 100
-
-    return {
-        "change_dollars": change_dollars,
-        "change_percent": change_percent
+    params = {
+        "symbol": SPY_TICKER,
+        "token": FINNHUB_API
     }
+    
+    try:
+        response = requests.get(BASE_URL, params=params)
+        response.raise_for_status()
+        data = response.json()
+        
+        current_price = data.get("c")
+        previous_close = data.get("pc")
+        
+        if current_price is not None and previous_close is not None:
+            daily_change = current_price - previous_close
+            daily_percent_change = (daily_change / previous_close) * 100
+            return {
+                "current_price": current_price,
+                "previous_close": previous_close,
+                "daily_change": daily_change,
+                "daily_percent_change": daily_percent_change
+            }
+        else:
+            logging.error("Incomplete data in API response.")
+    except requests.exceptions.RequestException as e:
+        logging.error(f"API request failed: {e}")

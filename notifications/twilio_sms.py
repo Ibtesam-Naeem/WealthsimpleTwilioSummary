@@ -2,6 +2,7 @@ from dotenv import load_dotenv
 import os
 from twilio.rest import Client
 load_dotenv()
+import logging
 
 TWILIO_ACCOUNT_SID = os.getenv("TWILIO_ACCOUNT_SID")
 TWILIO_AUTH_TOKEN = os.getenv("TWILIO_AUTH_TOKEN")
@@ -19,6 +20,6 @@ def send_sms(message):
             from_=TWILIO_PHONE_NUMBER,
             to=RECIPIENT_PHONE_NUMBER
         )
-        print("Message sent successfully!")
+        logging.info("Message sent successfully!")
     except Exception as e:
-        print(f"Failed to send SMS: {e}")
+        logging.critical(f"Failed to send SMS: {e}")
