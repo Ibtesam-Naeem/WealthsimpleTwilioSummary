@@ -1,6 +1,6 @@
 import os
 import sys
-from wealthsimple.auth import login, navigate_to_home, logout
+from auth.ws_login import login, navigate_to_home, logout
 from wealthsimple.ws_data import total_port_value, scrape_holdings, format_summary_message
 from analysis.sp500 import get_spy_daily_performance
 from wealthsimple.performance import read_previous_data, write_current_data, calculate_change

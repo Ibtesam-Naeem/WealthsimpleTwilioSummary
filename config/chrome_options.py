@@ -18,7 +18,7 @@ def chrome_option():
     chrome_options.add_argument("--no-sandbox")
     chrome_options.add_argument("--disable-dev-shm-usage")  
     
-    # Use main Chrome profile to retain cookies and avoid 2FA
+    # Uses main Chrome profile to retain cookies and avoid 2FA
     chrome_options.binary_location = os.getenv("CHROME_BINARY_PATH", "/Applications/Google Chrome.app/Contents/MacOS/Google Chrome")
     chrome_options.add_argument(f"user-data-dir={os.getenv('CHROME_USER_DATA_PATH', '/default/path/to/user-data')}")
     chrome_options.add_argument(f"profile-directory={os.getenv('CHROME_PROFILE', 'Default')}")
