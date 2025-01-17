@@ -2,8 +2,6 @@ import requests
 from dotenv import load_dotenv
 import os
 import logging
-import pandas as pd 
-from concurrent.futures import ThreadPoolExecutor, as_completed
 load_dotenv()
 
 FINNHUB_API = os.getenv("FINNHUB_API")

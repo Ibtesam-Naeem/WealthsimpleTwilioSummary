@@ -6,3 +6,4 @@ __pycache__/
 portfolio_data.json
 earnings_scraper.log
 wealthsimple_summary.log
+tesla_deliv_report.py

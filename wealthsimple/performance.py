@@ -2,9 +2,6 @@ import os
 import json
 import logging
 
-import os
-import json
-
 DATA_DIR = os.path.join(os.path.dirname(__file__), "data")
 os.makedirs(DATA_DIR, exist_ok=True) 
 
