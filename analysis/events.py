@@ -1,4 +1,7 @@
 from selenium import webdriver
+import os
+import sys
+sys.path.append(os.path.abspath(os.path.join(os.path.dirname(__file__), "..")))
 from selenium.webdriver.chrome.service import Service
 from selenium.webdriver.common.by import By
 from selenium.webdriver.common.keys import Keys
@@ -10,9 +13,10 @@ import logging
 import time
 from datetime import datetime, timedelta
 
+driver = chrome_option()
+
 def navigate_and_scrape_earnings():
     logging.info("Starting the earnings scraping process.")
-    driver = chrome_option()
     try:
         driver.get("https://www.investing.com/earnings-calendar/")
         logging.info("Navigated to Investing.com earnings calendar.")
@@ -45,19 +49,31 @@ def navigate_and_scrape_earnings():
                 if current_date not in [today_date]:
                     logging.debug("Skipping row not matching today's date.")
                     continue
-
+                
+                # Extracts Ticker / Company
                 ticker_element = row.find_element(By.XPATH, ".//td[contains(@class, 'earnCalCompany')]/a")
                 ticker = ticker_element.text.strip()
                 logging.debug(f"Extracted ticker: {ticker}")
 
+                # Extracts Forecast (eps)
+                forecast_element = row.find_element(By.XPATH, ".//td[contains(@class, 'leftStrong')]")
+                forecast = forecast_element.text.strip() if forecast_element else "N/A"
+                logging.debug(f"Extracted Forecast: {forecast}")
+
+                time_element = row.find_element(By.XPATH, ".//td[contains(@class, 'right time')]/span")
+                # Check if the element exists and has the 'data-tooltip' attribute
+                time_reporting = time_element.get_attribute("data-tooltip").strip() if time_element and time_element.get_attribute("data-tooltip") else "N/A"
+                logging.debug(f"Extracted Time Reporting: {time_reporting}")
+
+                # Extracts Market Cap
                 market_cap_element = row.find_element(By.XPATH, ".//td[contains(@class, 'right')][position()=last()-1]")
                 market_cap = market_cap_element.text.strip() if market_cap_element else "N/A"
                 logging.debug(f"Extracted market cap: {market_cap}")
 
+                # Markte Cap Filterer
                 if market_cap == "N/A":
                     logging.warning("Market cap is unavailable; skipping row.")
                     continue
-
                 if market_cap.endswith("T"):
                     multiplier = 1_000_000_000_000
                 elif market_cap.endswith("B"):
@@ -70,8 +86,9 @@ def navigate_and_scrape_earnings():
                 numeric_market_cap = float(market_cap[:-1]) * multiplier
                 logging.debug(f"Numeric market cap: {numeric_market_cap}")
 
+                # Only Extract those which are >= 500B
                 if numeric_market_cap >= 500_000_000:
-                    data_entry = f"${ticker} - {market_cap}"
+                    data_entry = f"${ticker} - {market_cap} - {forecast} - {time_reporting}"
                     earnings_data.append(data_entry)
                     logging.info(f"Added earnings data: {data_entry}")
                 else:
