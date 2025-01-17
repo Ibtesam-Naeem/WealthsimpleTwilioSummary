@@ -6,10 +6,16 @@ from selenium.webdriver.common.keys import Keys
 from selenium.webdriver.support.ui import WebDriverWait
 from selenium.webdriver.support import expected_conditions as EC
 from config.chrome_options import chrome_option
+from auth.otp import generate_otp
+import pyotp
 
 load_dotenv()
+
 email = os.getenv("WEALTHSIMPLE_EMAIL")
 password = os.getenv("WEALTHSIMPLE_PASSWORD")
+secret_key = os.getenv("SECRET_KEY")
+
+otp_code = generate_otp(secret_key)
 
 driver = chrome_option()
 
@@ -20,7 +26,8 @@ def login():
     try:
         # Navigate to WealthSimple
         driver.get("https://my.wealthsimple.com/app/login?locale=en-ca")
-
+        logging.info("Navigated to login page.")
+        
         WebDriverWait(driver, 30).until(
             EC.presence_of_element_located((By.XPATH, "//input[@inputmode='email']"))
         )
@@ -31,6 +38,7 @@ def login():
         email_element.clear()
 
         email_element.send_keys(email)
+        logging.info("Email entered.")
 
         WebDriverWait(driver, 10).until(
         EC.presence_of_all_elements_located((By.CSS_SELECTOR, "input[type='password']"))
@@ -43,14 +51,37 @@ def login():
 
         # After entering in the password, it will click enter to sign in
         password_element.send_keys(password + Keys.ENTER)
+        logging.info("Password entered.")
+
+        handle_otp()
 
         logging.info("Sucessfully Logged in!")
-
+    
         # Navigates to home page upon logging in
         navigate_to_home()
 
     except Exception as e:
         logging.error(f"Failed to log in: {e}")
+        raise
+   
+def handle_otp():
+    """
+    Handles the OTP input for the 2fa
+    """
+    try:
+        WebDriverWait(driver, 30).until(
+            EC.presence_of_element_located((By.CSS_SELECTOR, "input[autocomplete='one-time-code']"))
+        )
+
+        otp_element = driver.find_element(By.CSS_SELECTOR, "input[autocomplete='one-time-code']")
+
+        otp_element.clear()
+
+        otp_element.send_keys(otp_code + Keys.ENTER)
+        logging.info(f"Successfully entered OTP")
+
+    except Exception as e:
+        logging.critical(f"UNABLE TO ENTER OTP: {e}")
         raise
 
 def navigate_to_home():
