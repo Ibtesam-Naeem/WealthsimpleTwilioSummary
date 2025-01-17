@@ -5,8 +5,8 @@ from selenium.webdriver.chrome.options import Options
 
 def chrome_option():
     """
-    Configures and returns a Chrome WebDriver instance with a specific user profile.
-    - Uses the main Chrome profile to avoid 2FA and retain cookies.
+    Configures and returns a Chrome 
+    WebDriver instance 
     """
     chrome_options = Options()
     chrome_options.add_argument("--disable-gpu")
@@ -18,11 +18,6 @@ def chrome_option():
     chrome_options.add_argument("--no-sandbox")
     chrome_options.add_argument("--disable-dev-shm-usage")  
     
-    # Uses main Chrome profile to retain cookies and avoid 2FA
-    chrome_options.binary_location = os.getenv("CHROME_BINARY_PATH", "/Applications/Google Chrome.app/Contents/MacOS/Google Chrome")
-    chrome_options.add_argument(f"user-data-dir={os.getenv('CHROME_USER_DATA_PATH', '/default/path/to/user-data')}")
-    chrome_options.add_argument(f"profile-directory={os.getenv('CHROME_PROFILE', 'Default')}")
-
     service = Service(executable_path='/usr/local/bin/chromedriver')
     
     return webdriver.Chrome(service=service, options=chrome_options)
