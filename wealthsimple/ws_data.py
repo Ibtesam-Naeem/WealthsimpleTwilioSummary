@@ -87,7 +87,7 @@ def format_holdings(holdings):
             all_time_return = float(holding['All Time Return'].replace('USD', '').strip())
         except ValueError:
             all_time_return = 0
-        message.append(f"{index}. ${holding['Position']}: {holding['All Time Return'].replace('USD', '').strip()}")
+        message.append(f"{index}. ${holding['Position']} | {holding['All Time Return'].replace('USD', '').strip()}")
 
     return "\n".join(message)
 
