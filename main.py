@@ -6,7 +6,7 @@ from analysis.sp500 import get_spy_daily_performance
 from wealthsimple.performance import read_previous_data, write_current_data, calculate_change
 from config.twilio_sms import send_sms
 from datetime import datetime
-from analysis.events import navigate_and_scrape_earnings
+from analysis.events import trading_view_calendar
 from config.logging_info import setup_logging
 import logging
 
@@ -63,13 +63,23 @@ def daily_job():
         )
 
         logging.info("Scraping earnings data...")
-        earnings_data = navigate_and_scrape_earnings()
+        earnings_data = trading_view_calendar()
         earnings_summary = "\n".join(earnings_data) if earnings_data else "No significant earnings data for today or tomorrow."
         final_message += f"\n\nEarnings Summary:\n{earnings_summary}"
         
         # Step 6: Write Current Data and Send SMS
         logging.info("Writing current data...")
-        write_current_data("total_portfolio_value")
+        current_data = {
+            "total_portfolio_value": total_value,
+            "holdings": holdings
+        }
+
+        try:
+            write_current_data(current_data)
+            logging.info("Current data written successfully.")
+        except Exception as e:
+            logging.error(f"Failed to write current data: {e}")
+        
         logging.info("Sending SMS...")
         send_sms(final_message)
         logging.info("Daily job completed successfully.")
