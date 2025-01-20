@@ -90,4 +90,4 @@ def main():
         logging.error("Error running main job")
 
 if __name__ == "__main__":
-    main()d
+    main()
