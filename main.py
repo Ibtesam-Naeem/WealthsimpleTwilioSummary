@@ -64,8 +64,8 @@ def daily_job():
 
         logging.info("Scraping earnings data...")
         earnings_data = trading_view_calendar()
-        earnings_summary = "\n".join(earnings_data) if earnings_data else "No significant earnings data for today or tomorrow."
-        final_message += f"\n\nEarnings Summary:\n{earnings_summary}"
+        earnings_message = "\n".join(earnings_data) if earnings_data else "No significant earnings data for today or tomorrow."
+        final_message += f"\n\nEarnings Summary:\n{earnings_message}"
         
         # Step 6: Write Current Data and Send SMS
         logging.info("Writing current data...")
