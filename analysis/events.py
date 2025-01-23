@@ -1,4 +1,3 @@
-
 from selenium import webdriver
 from selenium.webdriver.chrome.service import Service
 from selenium.webdriver.common.by import By
@@ -32,42 +31,53 @@ def trading_view_calendar():
         earnings_data = []
         for row in rows:
             try:
-                # Extract Ticker
                 ticker_element = row.find_element(By.CSS_SELECTOR, "[data-field-key='name']")
                 ticker_full = ticker_element.text.strip()
                 ticker_d = ticker_full.split("\n")[0]
                 ticker = "".join(ticker_d[:-1])
 
-                # Extract Market Cap
                 market_cap_element = row.find_element(By.CSS_SELECTOR, "[data-field-key='market_cap_basic']")
                 market_cap = market_cap_element.text.strip("USD")
 
-                # Extract EPS Estimate
+                # Convert Market Cap to a numeric value
+                if market_cap in ["—", "", None]:
+                    market_cap_value = 0
+                elif market_cap.endswith("K"):
+                    market_cap_value = float(market_cap[:-1]) * 1_000
+                elif market_cap.endswith("M"):
+                    market_cap_value = float(market_cap[:-1]) * 1_000_000
+                elif market_cap.endswith("B"):
+                    market_cap_value = float(market_cap[:-1]) * 1_000_000_000
+                elif market_cap.endswith("T"):
+                    market_cap_value = float(market_cap[:-1]) * 1_000_000_000_000
+                else:
+                    market_cap_value = float(market_cap)
+
+                if market_cap_value <= 100_000_000_000:
+                    continue
+
                 eps_estimate_element = row.find_element(By.CSS_SELECTOR, "[data-field-key='earnings_per_share_forecast_next_fq']")
                 eps_estimate = eps_estimate_element.text.strip("USD") if eps_estimate_element else "N/A"
 
-                # Extract Revenue Forecast
                 revenue_forecast_element = row.find_element(By.CSS_SELECTOR, "[data-field-key='revenue_forecast_next_fq']")
                 revenue_forecast = revenue_forecast_element.text.strip("USD") if revenue_forecast_element else "N/A"
-    
+                                
                 earnings_data.append({
                     "Ticker": ticker,
                     "Market Cap": market_cap,
                     "EPS Estimate": eps_estimate,
                     "Revenue Forecast": revenue_forecast
-                })
+                    })
 
             except Exception as e:
                 logging.error(f"Error processing row: {e}")
 
             earnings_messages = [
-            f"{data['Ticker']}, {data['Market Cap']} | {data['EPS Estimate']} | {data['Revenue Forecast']}"
+            f"{data['Ticker']} | {data['Market Cap']} | {data['EPS Estimate']} | {data['Revenue Forecast']}"
             for data in earnings_data
             ]
         return earnings_messages
     
     finally:
         driver.quit()
-
-
-        
+        logging.info("Scraping process completed.")
