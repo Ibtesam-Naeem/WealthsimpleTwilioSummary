@@ -82,6 +82,7 @@ def daily_job():
         
         logging.info("Sending SMS...")
         send_sms(final_message)
+        # print(final_message) Testing purposes
         logging.info("Daily job completed successfully.")
 
     except Exception as e:
