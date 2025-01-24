@@ -103,7 +103,7 @@ def format_summary_message(total_value, holdings, sp500_data, change, percentage
         sp500_message = f"- S&P 500 Change: ${change_dollars:.2f} ({change_percent:.2f}%)"
             
     
-    change_message = f"- Daily Change: ${change:.2f} ({percentage:.2f}%)"
+    change_message = f"- Change Since Last Update: ${change:.2f} ({percentage:.2f}%)"
 
     holdings_message = format_holdings(holdings)
     return f"{title}\n{portfolio_message}\n{change_message}\n{sp500_message}\n\nTop Holdings:\n{holdings_message}"
