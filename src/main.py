@@ -58,15 +58,11 @@ def daily_job():
         )
 
         # Step 6: Write Current Data and Send SMS
-        try:
-            logging.info("Writing current data...")
-            current_data = {
-                "total_portfolio_value": total_value,
-                "holdings": holdings
-            }
-
-        except Exception as e:
-            logging.error(f"Failed to write current data: {e}")
+        logging.info("Writing current data...")
+        current_data = {
+            "total_portfolio_value": total_value,
+            "holdings": holdings
+        }
 
         try:
             write_current_data(current_data)
@@ -74,7 +70,7 @@ def daily_job():
         except Exception as e:
             logging.error(f"Failed to write current data: {e}")
         
-        logging.info("Sending SMS.")
+        logging.info("Sending SMS...")
         send_sms(final_message)
         logging.info("Daily job completed successfully.")
 
@@ -86,6 +82,7 @@ def main():
     Main function to execute the daily job
     """
     setup_logging()
+    logging.info("Program started.")
     
     try:
         daily_job()
