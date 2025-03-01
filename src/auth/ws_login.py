@@ -5,9 +5,8 @@ from selenium.webdriver.common.by import By
 from selenium.webdriver.common.keys import Keys
 from selenium.webdriver.support.ui import WebDriverWait
 from selenium.webdriver.support import expected_conditions as EC
-from config.chrome_options import chrome_option
+from config.chrome_options import chrome_options
 from auth.otp import generate_otp
-import pyotp
 
 load_dotenv()
 
@@ -17,7 +16,7 @@ secret_key = os.getenv("SECRET_KEY")
 
 otp_code = generate_otp(secret_key)
 
-driver = chrome_option()
+driver = chrome_options()
 
 def login():
     """

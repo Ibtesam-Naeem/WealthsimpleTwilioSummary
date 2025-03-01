@@ -1,12 +1,9 @@
-import os
-import sys
-from auth.ws_login import login, navigate_to_home, logout
+
+from auth.ws_login import login, logout
 from wealthsimple.ws_data import total_port_value, scrape_holdings, format_summary_message
 from analysis.sp500 import get_spy_daily_performance
 from wealthsimple.performance import read_previous_data, write_current_data, calculate_change
 from config.twilio_sms import send_sms
-from datetime import datetime
-from analysis.events import trading_view_calendar
 from config.logging_info import setup_logging
 import logging
 
@@ -41,8 +38,6 @@ def daily_job():
     send a summary message.
     """
     try:
-        logging.info("Starting daily job.")
-
         # Step 1: Fetch Portfolio Data
         logging.info("Fetching portfolio data...")
         previous_data = read_previous_data()
@@ -62,17 +57,16 @@ def daily_job():
             total_value, holdings, sp500_data, change, percentage, previous_data
         )
 
-        logging.info("Scraping earnings data...")
-        earnings_data = trading_view_calendar()
-        earnings_message = "\n".join(earnings_data) if earnings_data else "No significant earnings data for today or tomorrow."
-        final_message += f"\n\nEarnings Summary:\n{earnings_message}"
-        
         # Step 6: Write Current Data and Send SMS
-        logging.info("Writing current data...")
-        current_data = {
-            "total_portfolio_value": total_value,
-            "holdings": holdings
-        }
+        try:
+            logging.info("Writing current data...")
+            current_data = {
+                "total_portfolio_value": total_value,
+                "holdings": holdings
+            }
+
+        except Exception as e:
+            logging.error(f"Failed to write current data: {e}")
 
         try:
             write_current_data(current_data)
@@ -80,9 +74,8 @@ def daily_job():
         except Exception as e:
             logging.error(f"Failed to write current data: {e}")
         
-        logging.info("Sending SMS...")
+        logging.info("Sending SMS.")
         send_sms(final_message)
-        # print(final_message) Testing purposes
         logging.info("Daily job completed successfully.")
 
     except Exception as e:
@@ -93,7 +86,6 @@ def main():
     Main function to execute the daily job
     """
     setup_logging()
-    logging.info("Program started.")
     
     try:
         daily_job()

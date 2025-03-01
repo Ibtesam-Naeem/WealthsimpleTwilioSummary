@@ -3,7 +3,7 @@ from selenium import webdriver
 from selenium.webdriver.chrome.service import Service
 from selenium.webdriver.chrome.options import Options
 
-def chrome_option():
+def chrome_options():
     """
     Configures and returns a Chrome 
     WebDriver instance 

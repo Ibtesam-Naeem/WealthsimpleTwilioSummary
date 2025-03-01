@@ -1,15 +1,10 @@
-import os
-from selenium import webdriver
-from selenium.webdriver.chrome.service import Service
 from selenium.webdriver.common.by import By
-from selenium.webdriver.common.keys import Keys
 from selenium.webdriver.support.ui import WebDriverWait
 from selenium.webdriver.support import expected_conditions as EC
-from selenium.webdriver.chrome.options import Options
-from config.chrome_options import chrome_option
+from config.chrome_options import chrome_options
 import logging
 
-driver = chrome_option()
+driver = chrome_options()
 
 def total_port_value():
     """
