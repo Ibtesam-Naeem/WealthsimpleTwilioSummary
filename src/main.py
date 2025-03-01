@@ -72,7 +72,7 @@ def daily_job():
         
         logging.info("Sending SMS...")
         send_sms(final_message)
-        logging.info("Daily job completed successfully.")
+        logging.info(f"SMS sent successfully. {final_message}")
 
     except Exception as e:
         logging.error(f"Error in daily job: {e}")
