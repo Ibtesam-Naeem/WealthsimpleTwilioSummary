@@ -1,6 +1,10 @@
+dotenv==0.9.9
+psycopg2-binary==2.9.10
 pyotp==2.9.0
 python-dotenv==1.0.1
 requests==2.32.3
+schedule==1.2.2
 selenium==4.29.0
 sendgrid==6.11.0
+SQLAlchemy==2.0.38
 twilio==9.4.6

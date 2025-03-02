@@ -5,7 +5,7 @@ from wealthsimple.performance import read_previous_data, write_current_data, cal
 from notifier.twilio_sms import send_sms
 from notifier.sendgrid import send_weekly_email
 from config.logging_info import setup_logging
-from database.db_manager import insert_portfolio, insert_holding
+from config.db_manager import insert_portfolio, insert_holding
 import logging
 import schedule
 import time

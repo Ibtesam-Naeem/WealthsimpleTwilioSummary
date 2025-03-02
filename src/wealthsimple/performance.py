@@ -2,8 +2,8 @@ import os
 import json
 import logging
 from datetime import datetime, timedelta
-from database.db_manager import SessionLocal
-from database.db_manager import Portfolio, Holdings
+from config.db_manager import SessionLocal
+from config.db_manager import Portfolio, Holdings
 
 DATA_DIR = os.path.join(os.path.dirname(__file__), "data")
 os.makedirs(DATA_DIR, exist_ok=True) 
