@@ -29,7 +29,6 @@ def calculate_change(current_value, previous_value):
     Calculates the change in portfolio value between current and previous data.
     """
     try:
-        # Convert to numeric values (removing "$" and ",")
         current = float(current_value.replace("$", "").replace(",", ""))
         previous = float(previous_value.replace("$", "").replace(",", ""))
         change = current - previous
