@@ -102,6 +102,32 @@ Earnings Alerts:
 - GOOGL: Market Cap $1.7T, EPS Forecast $1.42, Reporting Before Market Open
 ```
 
+```
+Email
+📩 Subject: Your Weekly Portfolio Performance Summary 🚀
+📧 Email Content (Rendered View)
+Hey there,
+
+Your portfolio had an interesting week! Here’s your recap:
+
+💰 Starting Balance: $10,500.00
+📈 Ending Balance: $10,750.00
+📊 Weekly Change: +2.38%
+
+🏆 Biggest Gainer:
+AAPL gained $250.00 this week, leading your portfolio’s performance!
+
+📉 Biggest Loser:
+TSLA was your worst performer, dropping $180.00 over the past week.
+
+📅 The Week Ahead:
+Upcoming Earnings: NVDA reports on Tuesday. 📢
+Key Economic Data: CPI inflation report releases on Thursday. 💹
+Stay tuned for another week of market action! 🚀
+
+Cheers,
+Your Market Bot 🤖
+```
 ---
 
 ## Security Best Practices
