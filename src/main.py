@@ -45,20 +45,17 @@ def calculate_portfolio_change(total_value, previous_data):
     
     return None, None
 
-
 def daily_job():
     """
     Executes the daily job to fetch data, calculate changes, and
     send a summary message.
     """
     try:
-        # Step 1: Fetch Portfolio Data
         logging.info("Fetching portfolio data...")
         previous_data = read_previous_data()
         total_value, holdings = fetch_portfolio_data()
-        logging.info(f"Fetched portfolio")
+        logging.info("Fetched portfolio")
 
-        # Step 2: Store Portfolio Data in PostgreSQL
         portfolio_id = insert_portfolio(float(total_value.replace("$", "").replace(",", "")))
         
         for stock in holdings:
@@ -87,22 +84,16 @@ def daily_job():
             except (IndexError, ValueError, KeyError) as e:
                 logging.error(f"Error processing stock data: {stock}, Error: {e}")
 
-
-        
-        # Step 3: Fetch S&P 500 Data
         logging.info("Fetching S&P 500 data...")
         sp500_data = fetch_sp500_data()
         logging.info("Fetched S&P 500 data")
 
-        # Step 4: Calculate Portfolio Change
         change, percentage = calculate_portfolio_change(total_value, previous_data)
 
-        # Step 5: Generate Final Message
         final_message = format_summary_message(
             total_value, holdings, sp500_data, change, percentage, previous_data
         )
 
-        # Step 6: Write Current Data and Send SMS
         logging.info("Writing current data...")
         current_data = {
             "total_portfolio_value": total_value,
@@ -118,7 +109,7 @@ def daily_job():
         logging.info("Sending SMS...")
         send_sms(final_message)
         logging.info(f"SMS sent successfully. {final_message}")
-
+    
     except Exception as e:
         logging.error(f"Error in daily job: {e}")
         
@@ -132,18 +123,19 @@ def weekly_job():
 
 def main():
     """
-    Main function to schedule daily and weekly jobs.
+    Main function to schedule daily and weekly jobs for immediate testing.
     """
     setup_logging()
     logging.info("Scheduler started.")
     
     schedule.every().day.at("09:30").do(daily_job)
-    schedule.every().day.at("16:00").do(daily_job)
-    schedule.every().friday.at("20:00").do(weekly_job)
+    schedule.every().day.at("16:30").do(daily_job)
+
+    schedule.every().sunday.at("20:00").do(weekly_job)
     
     while True:
         schedule.run_pending()
-        time.sleep(60)
+        time.sleep(1)
 
 if __name__ == "__main__":
     main()
